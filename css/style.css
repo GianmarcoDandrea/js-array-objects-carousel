@@ -5,7 +5,7 @@
     --wrapper-width: 900px;
     --item-width: 600px;
     --thumbs-width: calc(var(--wrapper-width) - var(--item-width));
-    
+
 }
 
 * {
@@ -61,14 +61,16 @@
     flex-direction: column;
     justify-content: flex-end;
     align-items: flex-end;
+    margin-right: 0.5rem;
 }
 
 .title,
 .text {
-    width:75%;
+    width: 75%;
     color: white;
     text-align: end;
     margin: 0.5rem 0;
+    text-shadow: #000 1px 0 3px;
 }
 
 /* THUMBNAIL */

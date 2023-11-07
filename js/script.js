@@ -27,41 +27,41 @@ let activeImageIndex = 0;
 let thumb = "";
 let thumbsElem = document.querySelector(".thumbs");
 let itemElem = document.querySelector(".item");
-let x= 0
+let x = 0
+
 // array per le chiavi degli oggetti 
 const curImage = images.map((curImageElem) => curImageElem.image);
 const curTitle = images.map((curTitleElem) => curTitleElem.title);
 const curText = images.map((curTextElem) => curTextElem.text);
 let titleElem = document.querySelector(".title");
 let textElem = document.querySelector(".text");
-//constanti per l'autoloop
-let autoLoop;
-let stopBtn = document.querySelector(".stop");
-let playBtn = document.querySelector(".play");
-let switchBtn = document.querySelector(".switch");
 
+//constanti per l'autoloop
+let autoLoopElem;
 
 //CONDIZIONI INIZIALI 
 
 itemElem.style.backgroundImage = `url(${curImage[x]})`;
 titleElem.innerHTML = curTitle[x];
 textElem.innerHTML = curText[x];
+
 let loopValue = "normal";
 let loopControl;
+
+
 addThumbnailImage();
 
 let thumbElem = document.getElementsByClassName("thumb");
-
 console.log(thumbElem);
 
 // AUTOLOOP
-autoPlay()
+autoloop();
 
 // CONDIZIONE QUANDO CLICCO SUL UN'IMMAGINE DELLA THUMBNAIL LIST
 clickThumb();
 
 // CONDIZIONE QUANDO PREMO IL PULSANTE NEXT
-document.querySelector(".next").addEventListener("click", function(){
+document.querySelector(".next").addEventListener("click", function () {
     nextButton();
 });
 
@@ -79,7 +79,7 @@ document.querySelector(".prev").addEventListener("click", function () {
 ////////////////////////////////////////////////////// FUNZIONI /////////////////////////////////////////////
 
 /////////// funzione per aggiungere le immagini alla thumbnail list
-function addThumbnailImage(){
+function addThumbnailImage() {
 
     thumb = `
             <div class="thumb active" style="background-image: url(${curImage[0]});"></div>
@@ -99,20 +99,20 @@ function addThumbnailImage(){
 function clickThumb() {
     for (let i = 0; i < thumbElem.length; i++) {
         let index;
-        
-        thumbElem[i].addEventListener("click", function() {
+
+        thumbElem[i].addEventListener("click", function () {
             thumbElem[activeImageIndex].classList.remove("active");
-    
+
             index = i;
-    
+
             x = index;
             activeImageIndex = index;
-            
+
             thumbElem[activeImageIndex].classList.add("active");
             itemElem.style.backgroundImage = `url(${curImage[x]})`;
             titleElem.innerHTML = curTitle[x];
             textElem.innerHTML = curText[x];
-        });  
+        });
     }
 }
 
@@ -120,8 +120,8 @@ function clickThumb() {
 /////////// funzione per andare alla prossima immagine con collegamento all'immagine principale
 function nextButton() {
     thumbElem[activeImageIndex].classList.remove("active");
-    
-    if (activeImageIndex <  images.length - 1) {
+
+    if (activeImageIndex < images.length - 1) {
         x++;
         activeImageIndex++;
     } else {
@@ -140,11 +140,11 @@ function nextButton() {
 /////////// funzione per andare alla precedente immagine con collegamento all'immagine principale
 function prevButton() {
     thumbElem[activeImageIndex].classList.remove("active");
-    
-        
+
+
     if (activeImageIndex > 0) {
-        x --;
-        activeImageIndex --;
+        x--;
+        activeImageIndex--;
 
     } else {
         // PER IL LOOP
@@ -160,61 +160,68 @@ function prevButton() {
 }
 
 /////////// funzione per il loop
-function autoloop(){
+function normalLoop() {
 
-    autoLoop = setInterval(function() {
-        
+    autoLoopElem = setInterval(function () {
+
         nextButton();
-        loopControl = "normal"   
+        loopControl = "normal"
 
-    }, 1000);
+    }, 3000);
 
     return loopControl;
 }
 
 /////////// funzione per il loop inverso
-function reverseAutoLoop(){
-        
-    autoLoop = setInterval(function() {
-        
+function reverseLoop() {
+
+    autoLoopElem = setInterval(function () {
+
         prevButton();
-        loopControl = "reverse" 
-                
-    }, 1000);
+        loopControl = "reverse"
+
+    }, 3000);
     return loopControl;
 }
 
 /////////// funzione per il click dei bottoni
-function autoPlay() {
+function autoloop() {
+    let stopBtn = document.querySelector(".stop");
+    let playBtn = document.querySelector(".play");
+    let switchBtn = document.querySelector(".switch");
 
     // appena aperto parte con il loop automatico
-    autoloop();
+    normalLoop();
 
-    playBtn.addEventListener("click", function() {
-        clearInterval(autoLoop)
-        if(loopControl === "normal") {
-            autoloop()
+    playBtn.addEventListener("click", function () {
+
+        clearInterval(autoLoopElem);
+
+        if (loopControl === "normal") {
+            normalLoop();
         } else {
-            reverseAutoLoop()
+            reverseLoop();
         }
     })
 
-    stopBtn.addEventListener("click", function() {
-        clearInterval(autoLoop);
+    stopBtn.addEventListener("click", function () {
+        clearInterval(autoLoopElem);
     })
 
-    switchBtn.addEventListener("click", function() {
+    switchBtn.addEventListener("click", function () {
 
-        if(loopValue === "normal") {
+        if (loopValue === "normal") {
 
-            clearInterval(autoLoop);
-            reverseAutoLoop();
+            clearInterval(autoLoopElem);
+            reverseLoop();
             loopValue = "reverse";
+
         } else {
 
-            clearInterval(autoLoop);
-            autoloop();
+            clearInterval(autoLoopElem);
+            normalLoop();
             loopValue = "normal";
+
         }
     })
     return loopValue;
