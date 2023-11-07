@@ -39,14 +39,15 @@ let autoLoop;
 let stopBtn = document.querySelector(".stop");
 let playBtn = document.querySelector(".play");
 let switchBtn = document.querySelector(".switch");
-let loopValue = "normal";
+
 
 //CONDIZIONI INIZIALI 
 
 itemElem.style.backgroundImage = `url(${curImage[x]})`;
 titleElem.innerHTML = curTitle[x];
 textElem.innerHTML = curText[x];
-
+let loopValue = "normal";
+let loopControl;
 addThumbnailImage();
 
 let thumbElem = document.getElementsByClassName("thumb");
@@ -54,10 +55,7 @@ let thumbElem = document.getElementsByClassName("thumb");
 console.log(thumbElem);
 
 // AUTOLOOP
-autoloop();
-
-// BOTTONI AUTOLOOP 
-clickButton();
+autoPlay()
 
 // CONDIZIONE QUANDO CLICCO SUL UN'IMMAGINE DELLA THUMBNAIL LIST
 clickThumb();
@@ -167,8 +165,11 @@ function autoloop(){
     autoLoop = setInterval(function() {
         
         nextButton();
-                
+        loopControl = "normal"   
+
     }, 1000);
+
+    return loopControl;
 }
 
 /////////// funzione per il loop inverso
@@ -177,16 +178,25 @@ function reverseAutoLoop(){
     autoLoop = setInterval(function() {
         
         prevButton();
+        loopControl = "reverse" 
                 
     }, 1000);
+    return loopControl;
 }
 
 /////////// funzione per il click dei bottoni
-function clickButton() {
+function autoPlay() {
+
+    // appena aperto parte con il loop automatico
+    autoloop();
 
     playBtn.addEventListener("click", function() {
         clearInterval(autoLoop)
-        autoloop();
+        if(loopControl === "normal") {
+            autoloop()
+        } else {
+            reverseAutoLoop()
+        }
     })
 
     stopBtn.addEventListener("click", function() {
@@ -196,10 +206,12 @@ function clickButton() {
     switchBtn.addEventListener("click", function() {
 
         if(loopValue === "normal") {
+
             clearInterval(autoLoop);
             reverseAutoLoop();
             loopValue = "reverse";
         } else {
+
             clearInterval(autoLoop);
             autoloop();
             loopValue = "normal";
